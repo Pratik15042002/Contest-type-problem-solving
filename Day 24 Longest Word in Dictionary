@@ -1,0 +1,69 @@
+Day 24
+720. Longest Word in Dictionary
+Medium
+1.7K
+1.4K
+Companies
+Given an array of strings words representing an English Dictionary, return the longest word in words that can be built one character at a time by other words in words.
+If there is more than one possible answer, return the longest word with the smallest lexicographical order. If there is no answer, return the empty string.
+Note that the word should be built from left to right with each additional character being added to the end of a previous word. 
+ 
+Example 1:
+Input: words = ["w","wo","wor","worl","world"]
+Output: "world"
+Explanation: The word "world" can be built one character at a time by "w", "wo", "wor", and "worl".
+Example 2:
+Input: words = ["a","banana","app","appl","ap","apply","apple"]
+Output: "apple"
+Explanation: Both "apply" and "apple" can be built from other words in the dictionary. However, "apple" is lexicographically smaller than "apply".
+ 
+Constraints:
+•	1 <= words.length <= 1000
+•	1 <= words[i].length <= 30
+•	words[i] consists of lowercase English letters.
+
+class Solution {
+private: 
+    struct Node{
+        Node* arr[26];
+        bool end = false;
+    };
+public:
+    Node* root = new Node();
+    void trie_insert(string &word){
+        Node* node = root;
+        for(int i = 0; i < word.size(); i++){
+            if(node->arr[word[i] - 'a'] == NULL){
+                node->arr[word[i] - 'a'] = new Node();
+            }
+            node = node->arr[word[i] - 'a'];
+        }
+        node->end = true;
+    }
+    bool isValid(string &word, Node* curr){
+        for(int i = 0; i < word.size(); i++){
+            curr = curr->arr[word[i] - 'a'];
+            if(!curr->end) return false;
+        }
+        return true;
+    }
+    string longestWord(vector<string>& words) {
+        string ans = "";
+        for(auto w: words){
+            trie_insert(w);
+        }    
+        for(int i = words.size() - 1; i >= 0; i--){
+            if(isValid(words[i], root)){
+                if(words[i].length() > ans.length()){
+                    ans = words[i];
+                }else if(words[i].length() == ans.length()){
+                    ans = min(words[i], ans);
+                }
+            }
+        }
+        return ans;
+    }
+};
+ 
+Time complexity- O(N)
+Space complexity -O(N)
