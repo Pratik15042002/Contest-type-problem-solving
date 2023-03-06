@@ -1,0 +1,103 @@
+				Day 21
+B. Number Factorization
+time limit per test
+1 second
+memory limit per test
+256 megabytes
+input
+standard input
+output
+standard output
+Given an integer n�.
+Consider all pairs of integer arrays a� and p� of the same length such that n=∏apii�=∏���� (i.e. ap11⋅ap22⋅…�1�1⋅�2�2⋅…) (ai>1;pi>0��>1;��>0) and ai�� is the product of some (possibly one) distinct prime numbers.
+For example, for n=28=22⋅71=41⋅71�=28=22⋅71=41⋅71 the array pair a=[2,7]�=[2,7], p=[2,1]�=[2,1] is correct, but the pair of arrays a=[4,7]�=[4,7], p=[1,1]�=[1,1] is not, because 4=224=22 is a product of non-distinct prime numbers.
+Your task is to find the maximum value of ∑ai⋅pi∑��⋅�� (i.e. a1⋅p1+a2⋅p2+…�1⋅�1+�2⋅�2+…) over all possible pairs of arrays a� and p�. Note that you do not need to minimize or maximize the length of the arrays.
+Input
+Each test contains multiple test cases. The first line contains an integer t� (1≤t≤10001≤�≤1000) — the number of test cases.
+Each test case contains only one integer n� (2≤n≤1092≤�≤109).
+Output
+For each test case, print the maximum value of ∑ai⋅pi∑��⋅��.
+Example
+input
+Copy
+7
+100
+10
+864
+130056192
+1000000000
+2
+999999018
+output
+Copy
+20
+10
+22
+118
+90
+2
+333333009
+Note
+In the first test case, 100=102100=102 so that a=[10]�=[10], p=[2]�=[2] when ∑ai⋅pi∑��⋅�� hits the maximum value 10⋅2=2010⋅2=20. Also, a=[100]�=[100], p=[1]�=[1] does not work since 100100 is not made of distinct prime factors.
+In the second test case, we can consider 1010 as 101101, so a=[10]�=[10], p=[1]�=[1]. Notice that when 10=21⋅5110=21⋅51, ∑ai⋅pi=7∑��⋅��=7.
+
+Code 
+
+
+#include <bits/stdc++.h>
+#define ll long long
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define ios ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+using namespace std;
+ 
+int main()
+{   
+    ios;
+    #ifndef ONLINE_JUDGE
+    freopen("input1.txt", "r", stdin);
+    freopen("/Users/sreejith/Desktop/output.txt", "w", stdout);
+    #endif
+    ll t;
+    cin>>t;
+    while(t--) {
+        ll n,c = 0,sum=0;
+        cin>>n;
+        map < ll, ll > ma;
+        for(ll i = 2 ; i*i <= n ; i++) {
+            c=0;
+            while(n%i == 0) {
+                c++;
+                n/=i;
+                if(!ma.count(c)) {
+                    ma[c] = i;
+                }
+                else {
+                    ma[c]*=i;
+                }
+            }
+        }
+        if(n != 1) {
+            if(!ma.count(1))
+                ma[1] = n;
+            else {
+                ma[1]*=n;
+            }
+        }
+        map < ll , ll >::iterator it;
+        for(it = ma.begin(); it!=ma.end() ; it++) {
+            sum+=it->second;
+        }
+        cout<<sum<<endl;
+    }
+ 
+    return 0;     
+ }
+
+Time Complexity –O(n*m)
+Space Complexity -  O(N)					
+
+
+ 
